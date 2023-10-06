@@ -24,6 +24,17 @@ resource "aws_s3_bucket_versioning" "bradley_chatha_dev" {
   }
 }
 
+resource "aws_s3_bucket_cors_configuration" "bradley_chatha_dev" {
+  bucket = aws_s3_bucket.bradley_chatha_dev.bucket
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "HEAD"] # OPTIONS is not allowed, so I assume it's handled correctly
+    allowed_origins = ["https://${aws_route53_record.bradley_chatha_dev_cname.fqdn}"]
+    max_age_seconds = 3000
+  }
+}
+
 data "aws_iam_policy_document" "bradley_chatha_dev_s3" {
   policy_id = "bradley-chatha-dev-website"
   
